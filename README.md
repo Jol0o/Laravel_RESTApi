@@ -64,3 +64,98 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Laravel Project Setup Guide
+
+This guide will help you set up this Laravel project on a new device.
+
+## Prerequisites
+
+- PHP >= 7.3
+- Composer
+- Laravel CLI
+- MySQL (or any database system supported by Laravel)
+- Git
+
+## Steps
+
+1. **Clone the repository**
+
+    Open your terminal and run the following command:
+
+    ```bash
+    git clone https://github.com/yourusername/yourrepository.git
+    ```
+
+    Replace `yourusername` and `yourrepository` with your GitHub username and the name of your repository.
+
+2. **Navigate to the project directory**
+
+    ```bash
+    cd yourrepository
+    ```
+
+3. **Install dependencies**
+
+    Run the following command to install the project dependencies:
+
+    ```bash
+    composer install
+    ```
+
+4. **Copy the .env.example file**
+
+    Laravel uses the `.env` file to manage environment variables. Copy the `.env.example` file and rename it to `.env`:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+5. **Generate an application key**
+
+    Laravel requires an application key for encrypting data. Generate one using the following command:
+
+    ```bash
+    php artisan key:generate
+    ```
+
+6. **Set up the database**
+
+    Open the `.env` file and update the database settings:
+
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_database_name
+    DB_USERNAME=your_database_username
+    DB_PASSWORD=your_database_password
+    ```
+
+    Replace `your_database_name`, `your_database_username`, and `your_database_password` with your actual database name, username, and password.
+
+7. **Run migrations**
+
+    Run the following command to create the tables in the database:
+
+    ```bash
+    php artisan migrate
+    ```
+
+8. **Start the server**
+
+    Start the Laravel development server:
+
+    ```bash
+    php artisan serve
+    ```
+
+    You should now be able to access the application at `http://127.0.0.1:8000`.
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
