@@ -7,6 +7,12 @@ use App\Models\Room; // Import the Room model
 
 class RoomController extends Controller
 {
+    public function view()
+    {
+        $rooms = Room::all();
+        return view('rooms', compact('rooms'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +46,7 @@ class RoomController extends Controller
         $roomNumber = $lastRoom ? $lastRoom->room_number + 1 : 101;
 
         // Handle the image upload
+        $imageName = null;
         if ($request->hasFile('img')) {
             $imageName = time() . '.' . $request->img->extension();
             $request->img->move(public_path('images'), $imageName);
@@ -54,7 +61,7 @@ class RoomController extends Controller
             'img'         => $imageName,
         ]);
 
-        return response()->json($room, 201);
+        return redirect()->route('rooms.view');
     }
 
     /**
@@ -105,6 +112,6 @@ class RoomController extends Controller
     {
         // Find the room by ID and delete
         Room::findOrFail($id)->delete();
-        return response()->json(null, 204);
+        return redirect()->route('rooms.view');
     }
 }

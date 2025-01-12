@@ -23,12 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Add this to define a route for /bookings
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('bookings', BookingController::class);
-    Route::apiResource('rooms', RoomController::class);
-});
-Route::apiResource('users', UserController::class);
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('rooms', [RoomController::class, 'index']);
-Route::get('rooms/{room}', [RoomController::class, 'show']);
-Route::get('users/email/{email}', [UserController::class, 'showByEmail'])->where('email', '.*');
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::apiResource('bookings', BookingController::class);
+//     Route::apiResource('rooms', RoomController::class);
+// });
+// Route::apiResource('users', UserController::class);
+// Route::post('/login', [AuthController::class, 'login']);
+// Route::get('rooms', [RoomController::class, 'index']);
+// Route::get('rooms/{room}', [RoomController::class, 'show']);
+// Route::get('users/email/{email}', [UserController::class, 'showByEmail'])->where('email', '.*');
