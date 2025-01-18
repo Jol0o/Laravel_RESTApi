@@ -12,7 +12,7 @@ class BookingController extends Controller
     public function booking()
     {
         $bookings = Booking::with('user', 'room')->get();
-        $rooms = Room::all(); // Fetch all rooms
+        $rooms = Room::where('status', 'available')->get(); // Fetch all rooms
         return view('booking', compact('bookings', 'rooms'));
     }
     /**
@@ -56,6 +56,8 @@ class BookingController extends Controller
             'status'     => $request->status,
         ]);
 
+        $room->update(['status' => 'booked']);
+
         return redirect()->route('bookings');
     }
 
@@ -79,7 +81,7 @@ class BookingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+        public function update(Request $request, $id)
     {
         // Validate the request data
         $request->validate([
@@ -93,14 +95,23 @@ class BookingController extends Controller
         // Find the booking by ID
         $booking = Booking::findOrFail($id);
     
-        // Fetch the room ID based on the room number
+        // Set the previous room to available
+        $previousRoom = Room::findOrFail($booking->room_id);
+        $previousRoom->update(['status' => 'available']);
+    
+        // Fetch the new room ID based on the room number
         if ($request->has('room_number')) {
-            $room = Room::where('room_number', $request->room_number)->firstOrFail();
-            $request->merge(['room_id' => $room->id]);
+            $newRoom = Room::where('room_number', $request->room_number)->firstOrFail();
+            $request->merge(['room_id' => $newRoom->id]);
         }
     
         // Update the booking
         $booking->update($request->all());
+    
+        // Set the new room to booked
+        if (isset($newRoom)) {
+            $newRoom->update(['status' => 'booked']);
+        }
     
         return redirect()->route('bookings');
     }
@@ -111,10 +122,18 @@ class BookingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+     public function destroy($id)
     {
-        // Find the booking by ID and delete
-        Booking::findOrFail($id)->delete();
+        // Find the booking by ID
+        $booking = Booking::findOrFail($id);
+    
+        // Set the room to available
+        $room = Room::findOrFail($booking->room_id);
+        $room->update(['status' => 'available']);
+    
+        // Delete the booking
+        $booking->delete();
+    
         return redirect()->route('bookings');
     }
 }

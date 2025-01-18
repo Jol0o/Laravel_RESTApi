@@ -32,7 +32,7 @@ class AuthController extends Controller
         $request->validate([
             'name'         => 'required|unique:users',
             'email'        => 'required|unique:users|email',
-            'password'     => 'required|min:6',
+            'password'     => 'required|string|min:8|confirmed',
             'phone_number' => 'nullable',
         ]);
     
@@ -47,9 +47,7 @@ class AuthController extends Controller
         Auth::login($user);
     
         if (Auth::user()->role === 'guest') {
-            return redirect()->route('home');
-        } else if (Auth::user()->role === 'admin') {
-            return redirect()->route('rooms.view');
+            return redirect()->route('profile.show');
         }
     }
 
@@ -58,25 +56,31 @@ class AuthController extends Controller
         return view('auth.login');
     }
     
-    public function login(Request $request)
+      public function login(Request $request)
     {
+        // Validate the request data
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+    
         $credentials = $request->only('email', 'password');
     
         if (Auth::attempt($credentials)) {
-            // Get the currently authenticated user...
+            // Get the currently authenticated user
             $user = Auth::user();
     
-            // Generate a new token for the user...
+            // Generate a new token for the user
             $tokenResult = $user->createToken('Token Name');
             $token = $tokenResult->plainTextToken;
     
             if ($user->role === 'guest') {
                 return redirect()->route('home')->with('token', $token);
             } else if ($user->role === 'admin') {
-                return redirect()->route('rooms')->with('token', $token);
+                return redirect()->route('rooms.view')->with('token', $token);
             }
         } else {
-            return response()->json(['status' => 'fail'], 401);
+            return redirect()->route('login.form')->with('error', 'These credentials do not match our records.');
         }
     }
 }

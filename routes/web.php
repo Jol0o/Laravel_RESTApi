@@ -20,24 +20,29 @@ use App\Http\Controllers\AuthController;
 
 
 
-Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register.form');
-Route::post('register', [AuthController::class, 'register'])->name('register');
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login.form');
-Route::post('login', [AuthController::class, 'login'])->name('login');
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login.form');
+    Route::post('login', [AuthController::class, 'login'])->name('login');
+});
 
+Route::middleware('auth')->post('logout', [AuthController::class, 'logout'])->name('logout');
 // Route::get('booking', [BookingController::class, 'booking'])->name('booking');
 
 
+//protected routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     })->name('home');
 
     Route::resource('bookings', BookingController::class);
-    Route::resource('users', UserController::class);
     Route::resource('rooms', RoomController::class);
+
+    Route::get('profile', [UserController::class, 'index'])->name('profile.show');
+    Route::post('profile/update', [UserController::class, 'update'])->name('profile.update');
+
     Route::get('rooms', [RoomController::class, 'view'])->name('rooms.view');
-    Route::get('booking', [BookingController::class, 'booking'])->name('bookings');
-    Route::resource('bookings', BookingController::class)->except(['create', 'edit']);
+    Route::get('bookings', [BookingController::class, 'booking'])->name('bookings');
 });

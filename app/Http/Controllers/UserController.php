@@ -5,19 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User; // Import the User model
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the user's profile.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        // Retrieve all users
-        $users = User::all();
-        return response()->json($users);
+        // Retrieve the authenticated user
+        $user = Auth::user();
+        return view('profile', compact('user'));
     }
 
     /**
@@ -58,9 +59,9 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource by email.
      *
-     * @param  int  $email
+     * @param  string  $email
      * @return \Illuminate\Http\Response
      */
     public function showByEmail($email)
@@ -71,30 +72,35 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the authenticated user's profile.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        // Retrieve the authenticated user
+        $user = Auth::user();
+
         // Validate the request data
         $request->validate([
-            'name'         => 'required',
-            'email'        => 'required|email|unique:users,email,' . $id,
-            'role'         => 'required|in:admin,manager,receptionist,guest',
-            'phone_number' => 'required',
+            'name'         => 'required|unique:users,name,' . $user->id,
+            'email'        => 'required|email|unique:users,email,' . $user->id,
+            'password'     => 'nullable|string|min:8|confirmed',
+            'phone_number' => 'nullable',
         ]);
 
-        $request['password'] = Hash::make($request['password']);
-
-        // Find the user by ID
-        $user = User::findOrFail($id);
-
         // Update the user
-        $user->update($request->all());
-        return response()->json($user, 200);
+        $data = $request->all();
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
     }
 
     /**
