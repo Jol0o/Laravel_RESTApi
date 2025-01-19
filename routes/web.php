@@ -18,6 +18,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\AuthController;
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/login', function () {
+    return view('login');
+});
 
 
 Route::middleware('guest')->group(function () {
@@ -33,10 +40,15 @@ Route::middleware('auth')->post('logout', [AuthController::class, 'logout'])->na
 
 //protected routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
 
+    Route::get('/userview', function () {
+        return view('userview');
+    })->name('userview.view');
+    
+    Route::get('/adminview', function () {
+        return view('adminview');
+    })->name('adminview.view');
+    
     Route::resource('bookings', BookingController::class);
     Route::resource('rooms', RoomController::class);
 

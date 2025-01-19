@@ -75,9 +75,9 @@ class AuthController extends Controller
             $token = $tokenResult->plainTextToken;
     
             if ($user->role === 'guest') {
-                return redirect()->route('home')->with('token', $token);
+                return redirect()->route('userview.view')->with('token', $token);
             } else if ($user->role === 'admin') {
-                return redirect()->route('rooms.view')->with('token', $token);
+                return redirect()->route('adminview.view')->with('token', $token);
             }
         } else {
             return redirect()->route('login.form')->with('error', 'These credentials do not match our records.');
