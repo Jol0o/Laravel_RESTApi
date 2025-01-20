@@ -27,19 +27,19 @@
 
 <body>
     <div class="container mt-4">
-        <!-- Header Section -->
+     
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Rooms List</h1>
+            <h1>Rooms List</h1>?
+            <!-- logout function from web.php -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-danger">Logout</button>
             </form>
         </div>
 
-        <!-- Add Room Button -->
         <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addRoomModal">Add Room</button>
 
-        <!-- Modal for Adding Room -->
+
         <div class="modal fade" id="addRoomModal" tabindex="-1" aria-labelledby="addRoomModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -87,7 +87,7 @@
 
         <hr>
 
-        <!-- Rooms Table -->
+     
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead class="table-light">
@@ -109,13 +109,12 @@
                             <td>{{ $room->price }}</td>
                             <td>{{ $room->status }}</td>
                             <td>
-                                <!-- Edit Room Button - Triggers the Modal -->
+                          
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editRoomModal"
                                         data-id="{{ $room->id }}" data-room_number="{{ $room->room_number }}"
                                         data-type="{{ $room->type }}" data-price="{{ $room->price }}"
                                         data-status="{{ $room->status }}" data-img="{{ $room->img }}">Edit</button>
 
-                                <!-- Delete Room Form -->
                                 <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
@@ -129,7 +128,7 @@
         </div>
     </div>
 
-    <!-- Modal for Editing Room -->
+
     <div class="modal fade" id="editRoomModal" tabindex="-1" aria-labelledby="editRoomModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -176,10 +175,10 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS and Popper -->
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Add event listener to modal opening to populate fields with room data
+     
         var editRoomModal = document.getElementById('editRoomModal');
         editRoomModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;

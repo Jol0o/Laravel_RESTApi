@@ -20,7 +20,7 @@
             <button type="submit" class="btn btn-danger">Logout</button>
         </form>
 
-        <!-- Add Booking Button (Opens Modal) -->
+        <!-- Add Booking Button (Opens Modal) if user is guest -->
         @auth
             @if(Auth::user()->role === 'guest')
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBookingModal">
@@ -29,7 +29,6 @@
             @endif
         @endauth
 
-        <!-- Add Booking Modal -->
         <div class="modal fade" id="addBookingModal" tabindex="-1" aria-labelledby="addBookingModalLabel" aria-hidden="true">
             <div class="modal-dialog ">
                 <div class="modal-content">
@@ -71,7 +70,7 @@
 
         <hr>
 
-        <!-- Bookings Table -->
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -94,12 +93,10 @@
                         <td>{{ $booking->end_date }}</td>
                         <td>{{ $booking->status }}</td>
                         <td>
-                            <!-- Edit Booking Button (Opens Modal) -->
                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editBookingModal{{ $booking->id }}">
                                 Edit
                             </button>
 
-                            <!-- Edit Booking Modal -->
                             <div class="modal fade" id="editBookingModal{{ $booking->id }}" tabindex="-1" aria-labelledby="editBookingModalLabel{{ $booking->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -154,7 +151,6 @@
                                 </div>
                             </div>
 
-                            <!-- Delete Booking Form -->
                             <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
@@ -167,7 +163,6 @@
         </table>
     </div>
 
-    <!-- Include Bootstrap JS and Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
