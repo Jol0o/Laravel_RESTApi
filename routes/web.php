@@ -45,11 +45,6 @@ Route::middleware(['auth'])->group(function () {
         return view('userview');
     })->name('userview.view');
     
-    Route::get('/adminview', function () {
-        return view('adminview');
-    })->name('adminview.view');
-    
-    Route::resource('bookings', BookingController::class);
     Route::resource('rooms', RoomController::class);
 
     Route::get('profile', [UserController::class, 'index'])->name('profile.show');
@@ -57,4 +52,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('rooms', [RoomController::class, 'view'])->name('rooms.view');
     Route::get('bookings', [BookingController::class, 'booking'])->name('bookings');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/adminview', function () {
+        return view('adminview');
+    })->name('adminview.view');
+
+    Route::resource('bookings', BookingController::class);
 });
