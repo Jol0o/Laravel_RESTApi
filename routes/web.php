@@ -44,8 +44,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/userview', function () {
         return view('userview');
     })->name('userview.view');
-    
-    Route::resource('rooms', RoomController::class);
+     
+    Route::resource('bookings', BookingController::class);
 
     Route::get('profile', [UserController::class, 'index'])->name('profile.show');
     Route::post('profile/update', [UserController::class, 'update'])->name('profile.update');
@@ -59,5 +59,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return view('adminview');
     })->name('adminview.view');
 
-    Route::resource('bookings', BookingController::class);
+    Route::resource('rooms', RoomController::class);
 });

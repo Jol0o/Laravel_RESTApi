@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+
 <div class="container mt-5">
+<div class="card bg-white">
+<div class="card-body">
     <h1 class="mb-4">Profile</h1>
 
     @if (session('success'))
@@ -49,9 +54,11 @@
             <input id="password-confirm" type="password" name="password_confirmation" class="form-control" autocomplete="new-password">
         </div>
 
-        <div class="col-12 mt-3">
+        <div class="col-5 mt-3 d-flex align-items-center mx-auto">
             <button type="submit" class="btn btn-primary w-100">Update Profile</button>
         </div>
     </form>
+</div>
+</div>
 </div>
 @endsection
