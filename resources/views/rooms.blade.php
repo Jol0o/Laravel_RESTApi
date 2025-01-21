@@ -29,7 +29,7 @@
     <div class="container mt-4">
      
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Rooms List</h1>?
+            <h1>Rooms List</h1>
             <!-- logout function from web.php -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -71,10 +71,7 @@
                                         <option value="maintenance">Maintenance</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4 mt-3">
-                                    <label for="img" class="form-label">Image:</label>
-                                    <input type="file" id="img" name="img" class="form-control" required>
-                                </div>
+                              
                                 <div class="col-md-4 mt-3">
                                     <button type="submit" class="btn btn-primary">Add Room</button>
                                 </div>
@@ -137,11 +134,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editRoomForm" action="{{ route('rooms.update', ':id') }}" method="POST" enctype="multipart/form-data">
+                    <form id="editRoomForm" action="{{ route('rooms.update', ':id') }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row">
                             <div class="col-md-4">
+                            <input type="hidden" id="edit-room_number" name="room_number" class="form-control" required>
                                 <label for="type" class="form-label">Type:</label>
                                 <select id="edit-type" name="type" class="form-select" required>
                                     <option value="single">Single</option>
@@ -161,10 +159,7 @@
                                     <option value="maintenance">Maintenance</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mt-3">
-                                <label for="img" class="form-label">Image:</label>
-                                <input type="file" id="edit-img" name="img" class="form-control">
-                            </div>
+                           
                             <div class="col-md-4 mt-3">
                                 <button type="submit" class="btn btn-primary">Update Room</button>
                             </div>
@@ -192,7 +187,8 @@
             var formAction = "{{ route('rooms.update', ':id') }}".replace(':id', roomId);
             var form = document.getElementById('editRoomForm');
             form.action = formAction;
-
+            
+            document.getElementById('edit-room_number').value = roomNumber
             document.getElementById('edit-type').value = roomType;
             document.getElementById('edit-price').value = roomPrice;
             document.getElementById('edit-status').value = roomStatus;

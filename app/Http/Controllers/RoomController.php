@@ -38,19 +38,12 @@ class RoomController extends Controller
             'type'   => 'required',
             'price'  => 'required|numeric',
             'status' => 'required|in:available,booked,maintenance',
-            'img'    => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Get the last room_number and increment it by 1, or default to 101
         $lastRoom = Room::orderBy('room_number', 'desc')->first();
         $roomNumber = $lastRoom ? $lastRoom->room_number + 1 : 101;
 
-        // Handle the image upload
-        $imageName = null;
-        if ($request->hasFile('img')) {
-            $imageName = time() . '.' . $request->img->extension();
-            $request->img->move(public_path('images'), $imageName);
-        }
 
         // Create a new room
         $room = Room::create([
@@ -58,7 +51,6 @@ class RoomController extends Controller
             'type'        => $request->type,
             'price'       => $request->price,
             'status'      => $request->status,
-            'img'         => $imageName,
         ]);
 
         return redirect()->route('rooms.view');
@@ -85,9 +77,10 @@ class RoomController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+{
+    try {
         // Validate the request data
-        $request->validate([
+        $validatedData = $request->validate([
             'room_number' => 'required',
             'type'        => 'required',
             'price'       => 'required|numeric',
@@ -98,9 +91,17 @@ class RoomController extends Controller
         $room = Room::findOrFail($id);
 
         // Update the room
-        $room->update($request->all());
-        return response()->json($room, 200);
+        $room->update($validatedData);
+
+        return redirect()->route('rooms.view');
+    } catch (\Exception $e) {
+        // Handle errors (e.g., database error, validation error)
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 400);
     }
+}
+
 
     /**
      * Remove the specified resource from storage.

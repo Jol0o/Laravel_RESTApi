@@ -14,6 +14,6 @@ class Room extends Model
         return $this->hasMany(Booking::class);
     }
 
-    protected $fillable = ['room_number', 'type', 'price', 'status', 'img'];
+    protected $fillable = ['room_number', 'type', 'price', 'status'];
 
 }
