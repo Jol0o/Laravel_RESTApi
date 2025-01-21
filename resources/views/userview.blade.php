@@ -54,7 +54,7 @@
     </nav>
 
     <!-- Welcome Section -->
-    <div class="p-0 m-0 mt-5 container-body">
+    <div class="container mt-5 container-body" style="height: 76vh">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="text-center">
